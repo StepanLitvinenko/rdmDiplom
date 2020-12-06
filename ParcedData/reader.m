@@ -1,6 +1,6 @@
 clear 
-data=fopen('coordinatesPostForBsWithSn314.xy', 'rb');
-parcedData = fread(data, [2 inf], 'int32');
+data=fopen('peakPositionLte672.pos', 'rb');
+parcedData = fread(data, [1 inf], 'float');
 
 
-plot(parcedData(1,:),parcedData(2,:))
+plot(parcedData(1,:))

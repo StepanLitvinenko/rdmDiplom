@@ -21,22 +21,8 @@ int main()
 {
   Parcer parcerFile;
 
-    std::string fileName = "/home/stepan/.postlink/Files/Шевелев Александр Евгеньевич/Data/UMTS/umts_rdm_2020-12-03_07-41-16.dat";
-    auto resultsFromFile = parcerFile. ReadFile(fileName);
-    std::vector <UmtsRdmAnswer> requeriedGroupAnswer;
+    std::string fileName = "/home/stepan/RdmDiplom/FilesDataRdm/LTE/lte_rdm_2020-12-03_07-55-46.dat";
+    auto resultsFromFile = parcerFile.ParceFile(fileName, Gsm);
 
-    map <uint32_t, std::vector<UmtsRdmAnswer>> answersOrdered;
- //прочитали файл, сортируетм соответственно каждому ключу
-    for (auto a : resultsFromFile) {
-      answersOrdered[(a.key>>22)].push_back(a);
-    }
-//пробегаемся по мапе, записываем координаты поста для каждого ответа для конкретной БС
-    while (answersOrdered.begin()!=answersOrdered.end()) {
-
-      parcerFile.saveCoordinates( answersOrdered.begin()->second,  answersOrdered.begin()->first);
-      parcerFile.savePeakPos(answersOrdered.begin()->second,  answersOrdered.begin()->first);
-      answersOrdered.erase(answersOrdered.begin()->first);
-    }
-    std::cerr << " end of processing "<< std::endl;
     return 0;
 }
