@@ -8,6 +8,7 @@
 #include <list>
 #include <tuple>
 
+#include <map>
 using namespace std;
 
 struct GeoData {
@@ -92,14 +93,35 @@ std::vector<UmtsRdmAnswer> ReadFile(std::string fileName)
     in.close();
     return answers;
 }
+
+template <typename T>
+void saveCoordinates(const std::vector <T>& bsData, uint32_t group){
+  std::vector <int32_t> postCoordForReqGroup;
+  for(auto &answer: bsData){
+    postCoordForReqGroup.push_back(answer.geoData.latitude);
+    postCoordForReqGroup.push_back(answer.geoData.longitude);
+  }
+  std::string fileName = "/home/stepan/RdmDiplom/ParcedData/coordinatesPostForBsWithSn" + std::to_string(group) + ".xy";
+  std::ofstream file(fileName, std::ofstream::binary);
+  file.write(reinterpret_cast<const char*>(postCoordForReqGroup.data()), postCoordForReqGroup.size()*sizeof (int32_t));
+  file.close();
+}
 int main()
 {
-    std::string fileName = "/home/stepan/.postlink/Files/Шевелев Александр Евгеньевич/umts_rdm.dat";
+    std::string fileName = "/home/stepan/.postlink/Files/Шевелев Александр Евгеньевич/Data/UMTS/umts_rdm_2020-12-03_07-41-16.dat";
     auto resultsFromFile = ReadFile(fileName);
+    std::vector <UmtsRdmAnswer> requeriedGroupAnswer;
+
+    map <uint32_t, std::vector<UmtsRdmAnswer>> answersOrdered;
+ //прочитали файл, сортируетм соответственно каждому ключу
     for (auto a : resultsFromFile) {
-        //        std::cerr << " scramblingSeq: " << (a.key >> 22) << " freq: " << a.key - (a.key >> 22) << std::endl;4
-        auto b = a.key >> 22;
-        std::cerr << " idQuery " << a.idQuery << " freq: " << (a.key & b << 22) << " scramblingSeq: " << (a.key >> 22) << std::endl;
+      answersOrdered[(a.key>>22)].push_back(a);
+    }
+//пробегаемся по мапе, записываем координаты поста для каждого ответа для конкретной БС
+    while (answersOrdered.begin()!=answersOrdered.end()) {
+
+      saveCoordinates( answersOrdered.begin()->second,  answersOrdered.begin()->first);
+      answersOrdered.erase(answersOrdered.begin()->first);
     }
 
     return 0;
