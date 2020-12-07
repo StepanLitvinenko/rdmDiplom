@@ -19,10 +19,10 @@ using namespace RdmTypes;
 
 int main()
 {
-  Parcer parcerFile;
+	Parcer parcerFile;
 
-    std::string fileName = "/home/stepan/RdmDiplom/FilesDataRdm/LTE/lte_rdm_2020-12-03_07-55-46.dat";
-    auto resultsFromFile = parcerFile.ParceFile(fileName, Gsm);
+	std::string fileName = "/home/stepan/RdmDiplom/FilesDataRdm/LTE/lte_rdm_2020-12-03_07-55-46.dat";
+	auto resultsFromFile = parcerFile.ParceFile(fileName, Gsm);
 
-    return 0;
+	return 0;
 }
